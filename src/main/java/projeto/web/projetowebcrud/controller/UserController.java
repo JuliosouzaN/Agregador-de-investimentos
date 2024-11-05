@@ -12,7 +12,6 @@ import java.net.URI;
 @RequestMapping("/v1/users")
 public class UserController {
 
-    @Autowired
     private UserService userService;
 
     public UserController(UserService userService) {
@@ -20,13 +19,18 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody CreateUserDto createUserDto ){
-       var userId = userService.createUser(createUserDto);
+    public ResponseEntity<User> createUser(@RequestBody CreateUserDto createUserDto) {
+        var userId = userService.createUser(createUserDto);
         return ResponseEntity.created(URI.create("/v1/users" + userId.toString())).build();
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable("userId") String userId){
-        return null;
+    public ResponseEntity<User> getUserById(@PathVariable("userId") String userId) {
+        var user = userService.getUserbyId(userId);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
