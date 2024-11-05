@@ -36,13 +36,23 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity <List<User>> listUsers(){
-       var users = userService.listUsers();
-       return ResponseEntity.ok(users);
+    public ResponseEntity<List<User>> listUsers() {
+        var users = userService.listUsers();
+        return ResponseEntity.ok(users);
     }
 
+    @PutMapping("/{userId}")
+    public ResponseEntity<Void> updateUserById(@PathVariable("userId") String userId,
+                                               @RequestBody UpdateUserDto updateUserDto) {
+
+        userService.updateUserId(userId, updateUserDto);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteById(@PathVariable("userId") String userId){
+    public ResponseEntity<Void> deleteById(@PathVariable("userId") String userId) {
         userService.deleteById(userId);
         return ResponseEntity.noContent().build();
     }

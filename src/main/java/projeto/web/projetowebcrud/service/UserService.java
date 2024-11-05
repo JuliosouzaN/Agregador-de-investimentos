@@ -3,6 +3,7 @@ package projeto.web.projetowebcrud.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projeto.web.projetowebcrud.controller.CreateUserDto;
+import projeto.web.projetowebcrud.controller.UpdateUserDto;
 import projeto.web.projetowebcrud.entity.User;
 import projeto.web.projetowebcrud.repository.UserRepository;
 
@@ -35,17 +36,36 @@ public class UserService {
         return userRepository.findById(UUID.fromString(userId));
     }
 
-    public List<User> listUsers(){
+    public List<User> listUsers() {
         return userRepository.findAll();
     }
 
-    public void deleteById(String userId){
+    public void updateUserId(String userId, UpdateUserDto updateUserDto) {
+        var id = UUID.fromString(userId);
+
+        var userEntity = userRepository.findById(id);
+
+        if (userEntity.isPresent()) {
+            var user = userEntity.get();
+
+            if (updateUserDto.username() != null) {
+                user.setUsername(updateUserDto.username());
+            }
+
+            if (updateUserDto.password() != null) {
+                user.setPassword(updateUserDto.password());
+            }
+            userRepository.save(user);
+        }
+    }
+
+    public void deleteById(String userId) {
         var id = UUID.fromString(userId);
 
         var userExist = userRepository.existsById(id);
 
-        if (userExist){
-           userRepository.deleteById(id);
+        if (userExist) {
+            userRepository.deleteById(id);
         }
     }
 }
