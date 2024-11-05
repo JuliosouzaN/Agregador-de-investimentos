@@ -7,6 +7,7 @@ import projeto.web.projetowebcrud.entity.User;
 import projeto.web.projetowebcrud.repository.UserRepository;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,5 +33,9 @@ public class UserService {
 
     public Optional<User> getUserbyId(String userId) {
         return userRepository.findById(UUID.fromString(userId));
+    }
+
+    public List<User> listUsers(){
+        return userRepository.findAll();
     }
 }
